@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Videograph Template">
+    <meta name="keywords" content="Videograph, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Videograph | Template</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="css/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <style>
+        /* Custom style untuk membuat seluruh area gambar bisa diklik */
+        .portfolio__item__video {
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+            border-radius: 10px 10px 0 0;
+        }
+        
+        .portfolio__item__video a {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            z-index: 2;
+            background: rgba(0, 0, 0, 0);
+            transition: all 0.3s ease;
+        }
+        
+        .portfolio__item__video a .play-btn {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-size: 20px;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+            opacity: 0;
+        }
+        
+        .portfolio__item__video:hover a .play-btn {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .portfolio__item__video:hover a {
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .portfolio__item__video::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+        
+        .portfolio__item__video:hover::after {
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        .portfolio__item {
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+        
+        .portfolio__item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .portfolio__item__text {
+            padding: 20px;
+            background: #fff;
+        }
+        
+        .portfolio__item__text h4 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .portfolio__item__text ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .portfolio__item__text ul li {
+            background: #f8f9fa;
+            color: #6c757d;
+            padding: 5px 12px;
+            border-radius: 4px;
+            margin-right: 8px;
+            margin-bottom: 5px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .portfolio__item__text span {
+            color: #6c757d;
+            font-size: 14px;
+            font-style: italic;
+        }
+        
+        /* Portfolio Filter */
+        .portfolio__filter {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .portfolio__filter li {
+            padding: 10px 25px;
+            margin: 0 5px 10px;
+            background: #f8f9fa;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: #495057;
+            border: 2px solid transparent;
+        }
+        
+        .portfolio__filter li.active, 
+        .portfolio__filter li:hover {
+            background: #6c757d;
+            color: #fff;
+            border-color: #6c757d;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .portfolio__filter {
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding-bottom: 10px;
+            }
+            
+            .portfolio__filter li {
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Header Section Begin -->
+    <header class="header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-2">
+                    <div class="header__logo">
+                        <a href="./index.html"><img src="img/logo.png" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-lg-10">
+                    <div class="header__nav__option">
+                        <nav class="header__nav__menu mobile-menu">
+                            <ul>
+                                <li><a href="./index.html">Home</a></li>
+                                <li><a href="./about.html">About</a></li>
+                                <li class="active"><a href="./portfolio.html">Portfolio</a></li>
+                                <li><a href="./services.html">Services</a></li>
+                                <li><a href="#">Pages</a>
+                                    <ul class="dropdown">
+                                        <li><a href="./about.html">About</a></li>
+                                        <li><a href="./portfolio.html">Portfolio</a></li>
+                                        <li><a href="./blog.html">Blog</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="./contact.html">Contact</a></li>
+                            </ul>
+                        </nav>
+                        <div class="header__nav__social">
+                            <a href="#"><i class="fa fa-facebook"></i></a>
+                            <a href="#"><i class="fa fa-twitter"></i></a>
+                            <a href="#"><i class="fa fa-dribbble"></i></a>
+                            <a href="#"><i class="fa fa-instagram"></i></a>
+                            <a href="#"><i class="fa fa-youtube-play"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="mobile-menu-wrap"></div>
+        </div>
+    </header>
+    <!-- Header End -->
+
+    <!-- Breadcrumb Begin -->
+    <div class="breadcrumb-option spad set-bg" data-setbg="img/breadcrumb-bg.jpg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb__text">
+                        <h2>About My Work</h2>
+                        <div class="breadcrumb__links">
+                            <a href="about.html">My</a>
+                            <span>Work</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+    <!-- Portfolio Section Begin -->
+    <section class="portfolio spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <ul class="portfolio__filter">
+                        <li class="active" data-filter="*">All</li>
+                        <li data-filter=".branding">Game development</li>
+                        <li data-filter=".digital-marketing">Web development</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row portfolio__gallery">
+                <!-- Game Development Projects -->
+                <div class="col-lg-4 col-md-6 col-sm-6 mix branding">
+                    <div class="portfolio__item">
+                        <div class="portfolio__item__video set-bg" data-setbg="img/portfolio/2.png">
+                            <a href="https://frazasaka.itch.io/the-cave" target="_blank" class="play-btn">
+                                <i class="fa fa-external-link"></i>
+                            </a>
+                        </div>
+                        <div class="portfolio__item__text">
+                            <h4>The Cave Adventure</h4>
+                            <ul>
+                                <li>Unity</li>
+                                <li>C#</li>
+                                <li>2D Platformer</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 col-sm-6 mix branding">
+                    <div class="portfolio__item">
+                        <div class="portfolio__item__video set-bg" data-setbg="img/portfolio/1.png">
+                            <a href="https://frazasaka.itch.io/game-tebak-hewan" target="_blank" class="play-btn">
+                                <i class="fa fa-external-link"></i>
+                            </a>
+                        </div>
+                        <div class="portfolio__item__text">
+                            <h4>Animal Quiz Game</h4>
+                            <ul>
+                                <li>Unity</li>
+                                <li>2D Game</li>
+                                <li>Educational</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Web Development Projects -->
+                <div class="col-lg-4 col-md-6 col-sm-6 mix digital-marketing">
+                    <div class="portfolio__item">
+                        <div class="portfolio__item__video set-bg" data-setbg="img/portfolio/portfolio-2.jpg">
+                            <a href="https://fzaluu.github.io/X-python/" target="_blank" class="play-btn">
+                                <i class="fa fa-github"></i>
+                            </a>
+                        </div>
+                        <div class="portfolio__item__text">
+                            <h4>Python Learning Platform</h4>
+                            <ul>
+                                <li>HTML/CSS</li>
+                                <li>JavaScript</li>
+                                <li>Python</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 col-sm-6 mix digital-marketing">
+                    <div class="portfolio__item">
+                        <div class="portfolio__item__video set-bg" data-setbg="img/portfolio/portfolio-5.jpg">
+                            <a href="https://fzaluu.github.io/frazaa-S.A/" target="_blank" class="play-btn">
+                                <i class="fa fa-github"></i>
+                            </a>
+                        </div>
+                        <div class="portfolio__item__text">
+                            <h4>Personal Portfolio</h4>
+                            <ul>
+                                <li>HTML/CSS</li>
+                                <li>JavaScript</li>
+                                <li>Responsive</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Web Development Projects -->
+                <div class="col-lg-4 col-md-6 col-sm-6 mix digital-marketing">
+                    <div class="portfolio__item">
+                        <div class="portfolio__item__video set-bg" data-setbg="img/portfolio/portfolio-3.jpg">
+                            <a href="https://fzaluu.github.io/rzaxpplg2/" target="_blank" class="play-btn">
+                                <i class="fa fa-github"></i>
+                            </a>
+                        </div>
+                        <div class="portfolio__item__text">
+                            <h4>School Project Website</h4>
+                            <ul>
+                                <li>HTML/CSS</li>
+                                <li>Bootstrap</li>
+                                <li>JavaScript</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Additional Game Development Project -->
+                <div class="col-lg-4 col-md-6 col-sm-6 mix branding">
+                    <div class="portfolio__item">
+                        <div class="portfolio__item__video set-bg" data-setbg="img/portfolio/portfolio-6.jpg">
+                            <a href="https://frazasaka.itch.io/" target="_blank" class="play-btn">
+                                <i class="fa fa-external-link"></i>
+                            </a>
+                        </div>
+                        <div class="portfolio__item__text">
+                            <h4>Game Collection</h4>
+                            <ul>
+                                <li>Unity</li>
+                                <li>Game Design</li>
+                                <li>Multiple Games</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Portfolio Section End -->
+
+    <!-- Footer Section Begin -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__top">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="footer__top__logo">
+                            <a href="#"><img src="img/logo.png" alt=""></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <div class="footer__top__social">
+                            <a href="#"><i class="fa fa-facebook"></i></a>
+                            <a href="#"><i class="fa fa-twitter"></i></a>
+                            <a href="#"><i class="fa fa-dribbble"></i></a>
+                            <a href="#"><i class="fa fa-instagram"></i></a>
+                            <a href="#"><i class="fa fa-youtube-play"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer__option">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6 col-sm-6">
+                        <div class="footer__option__item">
+                            <h5>Hello</h5>
+                            <p>I'm Za — a web and game developer who enjoys creating clean, interactive, and meaningful digital experiences. I love exploring technology, blending creativity with logic, and continuously improving through every project I build.</p>
+                            <a href="about.html" class="read__more">Read more <span class="arrow_right"></span></a>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4 col-md-12">
+                        <div class="footer__option__item">
+                            <form action="#">
+                                <input type="text" placeholder="Email">
+                                <button type="submit"><i class="fa fa-send"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer__copyright">
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        <p class="footer__copyright__text">Copyright &copy;
+                            <script>
+                                document.write(new Date().getFullYear());
+                            </script>
+                            | FRAZA S.A  
+                        </p>
+                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer Section End -->
+
+    <!-- Js Plugins -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/mixitup.min.js"></script>
+    <script src="js/masonry.pkgd.min.js"></script>
+    <script src="js/jquery.slicknav.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
