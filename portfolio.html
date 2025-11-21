@@ -177,6 +177,60 @@
                 white-space: nowrap;
             }
         }
+        /* Page-specific override: place the rain toggle in the page flow (not fixed)
+           so it sits near the breadcrumb and scrolls with the page until the
+           portfolio area (and remains above the footer). Keep it aligned to the
+           right on wide screens and centered on small screens. */
+        /* Make the toggle fixed to the viewport's bottom-right corner and responsive.
+           The button will always be visible in the lower-right and will resize
+           for smaller screens. */
+        .breadcrumb-option { position: relative; }
+        .rain-toggle {
+            position: fixed !important;
+            right: 18px !important;
+            bottom: 18px !important;
+            left: auto !important;
+            z-index: 100030 !important;
+            display: flex !important;
+            justify-content: center;
+            align-items: center;
+            padding: 6px !important;
+            background: rgba(0,0,0,0.24) !important;
+            box-shadow: 0 10px 28px rgba(0,0,0,0.45) !important;
+            border-radius: 12px !important;
+            width: auto !important;
+            transition: transform .16s ease, background .18s ease;
+        }
+
+        /* Button sizing: larger on desktop, slightly smaller on tablet, compact on mobile */
+        .rain-toggle .rt-toggle {
+            width: 56px !important;
+            height: 56px !important;
+            font-size: 20px !important;
+            border-radius: 50% !important;
+            padding: 0 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+        @media (max-width: 991px) {
+            .rain-toggle { right: 14px !important; bottom: 14px !important; }
+            .rain-toggle .rt-toggle { width: 48px !important; height: 48px !important; font-size: 18px !important; }
+        }
+
+        @media (max-width: 480px) {
+            .rain-toggle { right: 10px !important; bottom: 10px !important; }
+            .rain-toggle .rt-toggle { width: 42px !important; height: 42px !important; font-size: 16px !important; }
+        }
+
+        /* Hover/focus affordance */
+        .rain-toggle .rt-toggle:hover,
+        .rain-toggle .rt-toggle:focus {
+            transform: translateY(-3px);
+            background: rgba(255,255,255,0.04) !important;
+            outline: none !important;
+        }
     </style>
 </head>
 
@@ -186,13 +240,18 @@
         <div class="loader"></div>
     </div>
 
+    <!-- Rain effect canvas (visual only) -->
+    <canvas id="rain-canvas" class="rain-canvas" aria-hidden="true"></canvas>
+    <!-- Toggle control for rain/fire effects (single moon-style toggle) -->
+    <!-- moved below the header so it appears under the navbar -->
+
     <!-- Header Section Begin -->
     <header class="header">
         <div class="container">
             <div class="row">
                 <div class="col-lg-2">
                     <div class="header__logo">
-                        <a href="./index.html"><img src="img/logo.png" alt=""></a>
+                        <a href="./index.html"><img class="logo-img" src="img/logo.png" alt=""></a>
                     </div>
                 </div>
                 <div class="col-lg-10">
@@ -207,7 +266,6 @@
                                     <ul class="dropdown">
                                         <li><a href="./about.html">About</a></li>
                                         <li><a href="./portfolio.html">Portfolio</a></li>
-                                        <li><a href="./blog.html">Blog</a></li>
                                     </ul>
                                 </li>
                                 <li><a href="./contact.html">Contact</a></li>
@@ -228,6 +286,8 @@
     </header>
     <!-- Header End -->
 
+    <!-- Place toggle directly under the navbar (moved later near breadcrumb) -->
+
     <!-- Breadcrumb Begin -->
     <div class="breadcrumb-option spad set-bg" data-setbg="img/breadcrumb-bg.jpg">
         <div class="container">
@@ -242,10 +302,15 @@
                     </div>
                 </div>
             </div>
+            <!-- Toggle placed inside breadcrumb so it sits bottom-right of this section and scrolls with page -->
+            <div class="rain-toggle" aria-hidden="false">
+                <button id="effect-toggle" class="rt-toggle" aria-pressed="false" title="Toggle Rain/Fire" type="button">
+                        <i class="fa fa-tint" aria-hidden="true"></i>
+                    </button>
+            </div>
         </div>
     </div>
     <!-- Breadcrumb End -->
-
     <!-- Portfolio Section Begin -->
     <section class="portfolio spad">
         <div class="container">
@@ -274,6 +339,7 @@
                                 <li>C#</li>
                                 <li>2D Platformer</li>
                             </ul>
+                            <p class="project-desc" style="display:none">A 2D platformer created with Unity. Players explore caves, collect items, and solve puzzles to progress through levels.</p>
                         </div>
                     </div>
                 </div>
@@ -292,6 +358,7 @@
                                 <li>2D Game</li>
                                 <li>Educational</li>
                             </ul>
+                            <p class="project-desc" style="display:none">An educational quiz game teaching animal recognition and facts, built with Unity for young learners.</p>
                         </div>
                     </div>
                 </div>
@@ -299,7 +366,7 @@
                 <!-- Web Development Projects -->
                 <div class="col-lg-4 col-md-6 col-sm-6 mix digital-marketing">
                     <div class="portfolio__item">
-                        <div class="portfolio__item__video set-bg" data-setbg="img/portfolio/portfolio-2.jpg">
+                        <div class="portfolio__item__video set-bg" data-setbg="img/portfolio/py.png">
                             <a href="https://fzaluu.github.io/X-python/" target="_blank" class="play-btn">
                                 <i class="fa fa-github"></i>
                             </a>
@@ -311,13 +378,14 @@
                                 <li>JavaScript</li>
                                 <li>Python</li>
                             </ul>
+                            <p class="project-desc" style="display:none">A web-based platform with interactive Python tutorials and examples, focused on beginners and practice exercises.</p>
                         </div>
                     </div>
                 </div>
                 
                 <div class="col-lg-4 col-md-6 col-sm-6 mix digital-marketing">
                     <div class="portfolio__item">
-                        <div class="portfolio__item__video set-bg" data-setbg="img/portfolio/portfolio-5.jpg">
+                        <div class="portfolio__item__video set-bg" data-setbg="img/portfolio/3.png">
                             <a href="https://fzaluu.github.io/frazaa-S.A/" target="_blank" class="play-btn">
                                 <i class="fa fa-github"></i>
                             </a>
@@ -329,6 +397,7 @@
                                 <li>JavaScript</li>
                                 <li>Responsive</li>
                             </ul>
+                            <p class="project-desc" style="display:none">A responsive personal portfolio website showcasing projects, contact info, and experience with modern layout techniques.</p>
                         </div>
                     </div>
                 </div>
@@ -336,7 +405,7 @@
                 <!-- Web Development Projects -->
                 <div class="col-lg-4 col-md-6 col-sm-6 mix digital-marketing">
                     <div class="portfolio__item">
-                        <div class="portfolio__item__video set-bg" data-setbg="img/portfolio/portfolio-3.jpg">
+                        <div class="portfolio__item__video set-bg" data-setbg="img/portfolio/logo.webp">
                             <a href="https://fzaluu.github.io/rzaxpplg2/" target="_blank" class="play-btn">
                                 <i class="fa fa-github"></i>
                             </a>
@@ -348,6 +417,7 @@
                                 <li>Bootstrap</li>
                                 <li>JavaScript</li>
                             </ul>
+                            <p class="project-desc" style="display:none">A school project site built using Bootstrap, demonstrating responsive pages, forms, and simple interactive features.</p>
                         </div>
                     </div>
                 </div>
@@ -367,6 +437,7 @@
                                 <li>Game Design</li>
                                 <li>Multiple Games</li>
                             </ul>
+                            <p class="project-desc" style="display:none">A showcase collection of smaller Unity games demonstrating different mechanics, prototypes, and level designs.</p>
                         </div>
                     </div>
                 </div>
@@ -375,6 +446,16 @@
     </section>
     <!-- Portfolio Section End -->
 
+    <!-- Project Description Modal -->
+    <div id="pg-modal" class="pg-modal" aria-hidden="true">
+        <div class="pg-modal-backdrop" role="presentation"></div>
+        <div class="pg-modal-content" role="dialog" aria-modal="true" aria-labelledby="pg-modal-title">
+            <button class="pg-modal-close" aria-label="Close">&times;</button>
+            <h3 id="pg-modal-title" class="pg-modal-title"></h3>
+            <div class="pg-modal-body"></div>
+        </div>
+    </div>
+
     <!-- Footer Section Begin -->
     <footer class="footer">
         <div class="container">
@@ -382,7 +463,7 @@
                 <div class="row">
                     <div class="col-lg-6 col-md-6">
                         <div class="footer__top__logo">
-                            <a href="#"><img src="img/logo.png" alt=""></a>
+                            <a href="#"><img class="logo-img" src="img/logo.png" alt=""></a>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6">

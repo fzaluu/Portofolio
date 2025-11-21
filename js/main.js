@@ -165,6 +165,43 @@
     });
 
     /*------------------
+        Project description modal (open when clicking a project card)
+    --------------------*/
+    $(document).on('click', '.portfolio__gallery .portfolio__item', function (e) {
+        // if clicked the play button link, allow default (external link)
+        if ($(e.target).closest('a.play-btn').length) return;
+
+        var $item = $(this);
+        var title = $item.find('.portfolio__item__text h4').text().trim();
+        var desc = $item.find('.project-desc').text().trim();
+        if (!desc) {
+            // fallback: build from tags
+            var tags = $item.find('.portfolio__item__text ul li').map(function () { return $(this).text(); }).get();
+            if (tags.length) desc = 'Tags: ' + tags.join(', ');
+            else desc = 'No description available.';
+        }
+
+        $('#pg-modal .pg-modal-title').text(title);
+        $('#pg-modal .pg-modal-body').text(desc);
+        $('#pg-modal').attr('aria-hidden', 'false').addClass('open');
+        $('body').addClass('pg-modal-open');
+    });
+
+    // Close modal (backdrop or close button)
+    $(document).on('click', '#pg-modal .pg-modal-backdrop, #pg-modal .pg-modal-close', function () {
+        $('#pg-modal').attr('aria-hidden', 'true').removeClass('open');
+        $('body').removeClass('pg-modal-open');
+    });
+
+    // Close on ESC
+    $(document).on('keydown', function (e) {
+        if (e.key === 'Escape' || e.keyCode === 27) {
+            $('#pg-modal').attr('aria-hidden', 'true').removeClass('open');
+            $('body').removeClass('pg-modal-open');
+        }
+    });
+
+    /*------------------
         Counter
     --------------------*/
     $('.counter_num').each(function () {
@@ -178,5 +215,155 @@
             }
         });
     });
+
+    /*------------------
+        Rain effect (canvas) — drip / drizzle tuned for small short particles
+    --------------------*/
+    (function initRain() {
+        var canvas = document.getElementById('rain-canvas');
+        if (!canvas) return;
+        var ctx = canvas.getContext('2d');
+        var w = 0, h = 0;
+        var drops = [];
+        var maxDrops = 260;
+        var mode = 'rain'; // 'rain' or 'fire'
+
+        var isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        if (isTouch) maxDrops = 100; // reduce on mobile
+
+        function resize() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        }
+
+        // reset a drop with a type: 'drizzle' (small) or 'drop' (long)
+        function resetDrop(d, forceType) {
+            d.x = Math.random() * w;
+            d.y = -5 - Math.random() * (h * 0.2);
+            var type;
+            if (forceType) type = forceType;
+            else type = (Math.random() < 0.75) ? 'drizzle' : 'drop'; // 75% drizzle
+
+            if (type === 'drizzle') {
+                d.type = 'drizzle';
+                d.len = 4 + Math.random() * 8;          // short streak
+                d.speed = 0.6 + Math.random() * 1.6;   // slow
+                d.xs = -0.18 + Math.random() * 0.36;   // tiny horizontal skew
+                d.alpha = 0.05 + Math.random() * 0.12; // very faint
+                d.width = 0.35 + Math.random() * 0.7;  // thin
+            } else {
+                d.type = 'drop';
+                d.len = 12 + Math.random() * 30;      // longer
+                d.speed = 3 + Math.random() * 8;      // faster
+                d.xs = -0.5 + Math.random() * 1.2;    // more skew
+                d.alpha = 0.12 + Math.random() * 0.6; // more visible
+                d.width = 1 + Math.random() * 1.6;    // thicker
+            }
+        }
+
+        function createDrops() {
+            drops = [];
+            var count = Math.min(maxDrops, Math.floor(w / 3.5));
+            for (var i = 0; i < count; i++) {
+                var d = {};
+                // bias initial distribution: more drizzle than drops
+                resetDrop(d);
+                d.y = Math.random() * h;
+                drops.push(d);
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, w, h);
+            ctx.lineCap = 'round';
+            for (var i = 0; i < drops.length; i++) {
+                var p = drops[i];
+                ctx.beginPath();
+
+                // choose color depending on mode
+                var color;
+                if (mode === 'fire') {
+                    // fire tones: drizzle -> faint orange ember, drop -> bright orange
+                    color = (p.type === 'drizzle') ? 'rgba(255,180,100,' + p.alpha + ')' : 'rgba(255,150,40,' + p.alpha + ')';
+                } else {
+                    color = (p.type === 'drizzle') ? 'rgba(200,210,220,' + p.alpha + ')' : 'rgba(174,194,224,' + p.alpha + ')';
+                }
+
+                ctx.strokeStyle = color;
+                ctx.lineWidth = p.width;
+                ctx.moveTo(p.x, p.y);
+                ctx.lineTo(p.x + p.xs * p.len, p.y + p.len);
+                ctx.stroke();
+
+                // for fire mode add tiny ember glow at the end of the streak
+                if (mode === 'fire') {
+                    var ex = p.x + p.xs * p.len;
+                    var ey = p.y + p.len;
+                    var g = ctx.createRadialGradient(ex, ey, 0, ex, ey, Math.max(6, p.width * 6));
+                    g.addColorStop(0, 'rgba(255,230,180,' + (p.alpha * 0.9) + ')');
+                    g.addColorStop(0.6, 'rgba(255,140,30,' + (p.alpha * 0.6) + ')');
+                    g.addColorStop(1, 'rgba(0,0,0,0)');
+                    ctx.fillStyle = g;
+                    ctx.beginPath();
+                    ctx.arc(ex, ey, Math.max(2, p.width * 3), 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                // motion
+                p.x += p.xs * (p.speed * 0.4);
+                p.y += p.speed;
+
+                // recycle when out of view
+                if (p.y > h + 30 || p.x < -50 || p.x > w + 50) {
+                    resetDrop(p);
+                }
+            }
+            requestAnimationFrame(draw);
+        }
+
+        window.addEventListener('resize', function () {
+            resize();
+            createDrops();
+        }, { passive: true });
+
+        // toggle handlers (buttons added to page)
+        function setMode(m) {
+            mode = m === 'fire' ? 'fire' : 'rain';
+            // recreate drops so color/alpha distribution updates
+            createDrops();
+            // update single-toggle UI if present
+            var toggle = document.getElementById('effect-toggle');
+            if (toggle) {
+                toggle.classList.toggle('rt-active', mode === 'fire');
+                toggle.setAttribute('aria-pressed', mode === 'fire');
+                var icon = toggle.querySelector('i');
+                // use water droplet for rain, fire icon for fire
+                if (icon) icon.className = mode === 'fire' ? 'fa fa-fire' : 'fa fa-tint';
+            }
+            // apply theme class on body so site colors change with mode
+            try {
+                document.body.classList.toggle('theme-fire', mode === 'fire');
+                document.body.classList.toggle('theme-rain', mode === 'rain');
+            } catch (e) { /* ignore if no DOM */ }
+        }
+
+        // single-toggle handler
+        var btnToggle = document.getElementById('effect-toggle');
+        if (btnToggle) {
+            btnToggle.addEventListener('click', function () {
+                var newMode = (mode === 'rain') ? 'fire' : 'rain';
+                setMode(newMode);
+            });
+        }
+
+        // start
+        resize();
+        createDrops();
+        // set initial theme to match default mode
+        setMode(mode);
+        requestAnimationFrame(draw);
+    })();
+
+    // No sticky/fixed toggle behavior — the button will remain in-flow and scroll with the page.
 
 })(jQuery);

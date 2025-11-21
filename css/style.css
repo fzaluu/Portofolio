@@ -1198,6 +1198,32 @@ ol {
   display: inline-block;
 }
 
+/* Responsive site logo (crown) */
+.logo-img {
+  max-width: 180px;
+  width: auto;
+  height: auto;
+  display: block;
+}
+
+@media only screen and (max-width: 991px) {
+  .logo-img {
+    max-width: 140px;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .logo-img {
+    max-width: 110px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .logo-img {
+    max-width: 90px;
+  }
+}
+
 /*---------------------
   Portfolio
 -----------------------*/
@@ -1255,6 +1281,36 @@ ol {
   text-align: center;
   border: 1px solid rgba(255, 255, 255, 0.7);
   border-radius: 50%;
+}
+
+/* Specific sizing/treatment for py.png background image */
+.portfolio__item__video[data-setbg="img/portfolio/py.png"] {
+  background-size: contain !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  height: 220px !important;
+}
+
+@media only screen and (max-width: 768px) {
+  .portfolio__item__video[data-setbg="img/portfolio/py.png"] {
+    height: 170px !important;
+    background-size: contain !important;
+  }
+}
+
+/* Make portfolio item image 'logo.webp' (skull/logo) fit inside project box */
+.portfolio__item__video[data-setbg="img/portfolio/logo.webp"] {
+  background-size: contain !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  height: 220px !important;
+}
+
+@media only screen and (max-width: 768px) {
+  .portfolio__item__video[data-setbg="img/portfolio/logo.webp"] {
+    height: 170px !important;
+    background-size: contain !important;
+  }
 }
 
 .portfolio__item__text {
@@ -2058,8 +2114,9 @@ ol {
     position: absolute;
     right: 10px;
     top: 26px;
-    background: #00bfe7;
-  }
+    background: transparent;
+}
+
 
   .header .container {
     position: relative;
@@ -2168,3 +2225,359 @@ ol {
     padding: 30px 40px 35px 35px;
   }
 }
+
+/* Strong overrides to ensure slicknav button is icon-only and fully transparent */
+.slicknav_menu {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+.slicknav_menu .slicknav_menutxt {
+  display: none !important;
+}
+.slicknav_btn {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+.slicknav_menu .slicknav_icon-bar {
+  background-color: #fff !important; /* ensure bars remain visible */
+  width: 18px !important;
+  height: 2px !important;
+}
+
+/* Make full nav overlay transparent and add a smooth fade/slide when opening */
+.slicknav_nav {
+  background: transparent !important;
+  transition: opacity .28s cubic-bezier(.2,.9,.2,1), transform .32s cubic-bezier(.2,.9,.2,1);
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+}
+
+.slicknav_btn.slicknav_open + .slicknav_nav {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* If plugin inserts nav elsewhere use this fallback to ensure transparency */
+.slicknav_nav, .slicknav_nav ul, .slicknav_nav li, .slicknav_nav .slicknav_row { background: transparent !important; }
+
+/* Ensure menu row labels are NOT transparent - give them a subtle solid backdrop for readability */
+.slicknav_nav .slicknav_row {
+  background: rgba(0,0,0,0.55) !important; /* semi-opaque dark backdrop for each item */
+  color: #ffffff !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25) !important;
+}
+.slicknav_nav .slicknav_row:hover {
+  background: rgba(255,255,255,0.06) !important;
+  color: #ffffff !important;
+}
+
+/* Right-side mobile menu: position the nav to the right and align text to right */
+.slicknav_nav {
+  position: absolute !important;
+  top: 58px !important; /* place under header */
+  right: 12px !important;
+  width: 240px !important;
+  max-width: calc(100% - 24px) !important;
+  padding: 10px !important;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.45) !important;
+  border-radius: 10px !important;
+  background: transparent !important;
+  transform-origin: right center !important;
+}
+.slicknav_nav ul {
+  padding: 6px 0 !important;
+}
+.slicknav_nav .slicknav_row {
+  text-align: right !important;
+  padding-right: 14px !important;
+  padding-left: 12px !important;
+}
+
+/* Animate rows from right -> left when opening (staggered) */
+.slicknav_nav .slicknav_row {
+  transform: translateX(12px) !important;
+  opacity: 0 !important;
+}
+.slicknav_btn.slicknav_open + .slicknav_nav .slicknav_row { transform: translateX(0) !important; opacity: 1 !important; }
+.slicknav_btn.slicknav_open + .slicknav_nav li:nth-child(1) .slicknav_row { transition-delay: 0.04s !important; }
+.slicknav_btn.slicknav_open + .slicknav_nav li:nth-child(2) .slicknav_row { transition-delay: 0.08s !important; }
+.slicknav_btn.slicknav_open + .slicknav_nav li:nth-child(3) .slicknav_row { transition-delay: 0.12s !important; }
+.slicknav_btn.slicknav_open + .slicknav_nav li:nth-child(4) .slicknav_row { transition-delay: 0.16s !important; }
+.slicknav_btn.slicknav_open + .slicknav_nav li:nth-child(5) .slicknav_row { transition-delay: 0.20s !important; }
+.slicknav_btn.slicknav_open + .slicknav_nav li:nth-child(6) .slicknav_row { transition-delay: 0.24s !important; }
+.slicknav_btn.slicknav_open + .slicknav_nav li:nth-child(7) .slicknav_row { transition-delay: 0.28s !important; }
+.slicknav_btn.slicknav_open + .slicknav_nav li:nth-child(8) .slicknav_row { transition-delay: 0.32s !important; }
+
+/* Keep rows semi-opaque and readable when aligned right */
+.slicknav_nav .slicknav_row { background: rgba(0,0,0,0.55) !important; }
+
+/* Portfolio: transparent filters and translucent project cards */
+.portfolio__filter li {
+  background: transparent !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
+  color: #ffffff !important;
+}
+.portfolio__filter li.active,
+.portfolio__filter li:hover {
+  background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)) !important;
+  color: #fff !important;
+  border-color: rgba(255,255,255,0.12) !important;
+}
+
+/* Make the project card itself translucent with a soft gradient shadow */
+.portfolio__item {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)) !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.55) !important;
+}
+.portfolio__item__text {
+  background: transparent !important;
+  color: #ffffff !important;
+}
+.portfolio__item__text h4 { color: #ffffff !important; }
+.portfolio__item__text ul li { background: rgba(255,255,255,0.04) !important; color: #fff !important; }
+
+/* Darken image area slightly to improve contrast over transparent card */
+.portfolio__item__video::after {
+  background: linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.32)) !important;
+}
+
+.project-desc { display: none; }
+
+/* Modal styles for project explanations */
+.pg-modal { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; z-index: 99999; }
+.pg-modal.open { display: flex; }
+.pg-modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.58); backdrop-filter: blur(3px); }
+.pg-modal-content { position: relative; z-index: 2; width: 96%; max-width: 720px; background: linear-gradient(180deg, rgba(18,18,18,0.98), rgba(28,28,28,0.98)); padding: 22px; border-radius: 12px; box-shadow: 0 30px 80px rgba(0,0,0,0.7); color: #fff; }
+.pg-modal-close { position: absolute; top: 10px; right: 12px; background: transparent; border: none; color: #fff; font-size: 28px; line-height: 1; cursor: pointer; }
+.pg-modal-title { margin: 4px 0 12px 0; font-size: 20px; }
+.pg-modal-body { color: #ddd; font-size: 15px; line-height: 1.6; }
+body.pg-modal-open { overflow: hidden; }
+
+@media (max-width: 480px) {
+  .portfolio__filter { justify-content: flex-start; }
+  .portfolio__item { box-shadow: 0 12px 28px rgba(0,0,0,0.6) !important; }
+  .pg-modal-content { padding: 18px; }
+}
+
+/* Rain canvas overlay */
+.rain-canvas {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 99990 !important;
+  pointer-events: none !important;
+  mix-blend-mode: screen;
+  opacity: 0.95;
+}
+
+/* Reduce intensity on small screens */
+@media (max-width: 768px) {
+  .rain-canvas { opacity: 0.7; }
+}
+
+/* Rain/Fire toggle UI */
+.rain-toggle {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 100010;
+  display: flex;
+  gap: 8px;
+  background: rgba(0,0,0,0.28);
+  padding: 6px;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+}
+.rain-toggle .rt-btn {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+}
+.rain-toggle .rt-btn.rt-active {
+  background: linear-gradient(90deg,#ff9a1f,#ffd85a);
+  color: #1b0b00;
+  border-color: rgba(255,255,255,0.12);
+}
+
+@media (max-width: 480px) {
+  .rain-toggle { top: 8px; right: 8px; padding: 4px; }
+  .rain-toggle .rt-btn { padding: 5px 8px; font-size: 12px; }
+}
+
+  /* Moon-style single toggle button */
+  .rain-toggle .rt-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    color: #fff;
+    cursor: pointer;
+    font-size: 18px;
+    transition: transform 180ms ease, box-shadow 220ms ease, background 220ms ease;
+  }
+  .rain-toggle .rt-toggle:hover { transform: translateY(-2px); }
+  .rain-toggle .rt-toggle:active { transform: translateY(0); }
+  .rain-toggle .rt-toggle.rt-active {
+    background: linear-gradient(90deg,#ff9a1f,#ffd85a);
+    color: #1b0b00;
+    box-shadow: 0 8px 28px rgba(255,130,20,0.18);
+  }
+
+  /* smaller on very small screens */
+  @media (max-width: 480px) {
+    .rain-toggle .rt-toggle { width: 36px; height: 36px; font-size: 15px; }
+  }
+
+/* Theme switches triggered by rain/fire toggle */
+body.theme-rain {
+  --site-bg: #0b0720;
+  --accent: #00bfe7;
+  --muted: #9fb6c8;
+  --card-bg: rgba(255,255,255,0.02);
+  --primary-gradient: linear-gradient(90deg,#00bfe7,#00d6c5);
+}
+
+body.theme-fire {
+  --site-bg: #2a0b00;
+  --accent: #ff7a00;
+  --muted: #ffd8b0;
+  --card-bg: rgba(0,0,0,0.08);
+  --primary-gradient: linear-gradient(90deg,#ff9a1f,#ffd85a);
+}
+
+/* Apply theme variables to common elements */
+body.theme-rain, body.theme-fire {
+  background: var(--site-bg) !important;
+}
+
+body.theme-rain .primary-btn,
+body.theme-fire .primary-btn {
+  background: var(--primary-gradient) !important;
+}
+
+body.theme-rain .header,
+body.theme-fire .header {
+  border-bottom-color: rgba(255,255,255,0.06) !important;
+}
+
+body.theme-rain .portfolio,
+body.theme-fire .portfolio {
+  background: var(--site-bg) !important;
+}
+
+body.theme-rain .portfolio__item {
+  background: linear-gradient(180deg, rgba(0,10,20,0.04), rgba(0,0,0,0.02)) !important;
+}
+
+body.theme-fire .portfolio__item {
+  background: linear-gradient(180deg, rgba(30,8,2,0.04), rgba(10,0,0,0.02)) !important;
+}
+
+body.theme-fire .header__nav__social a,
+body.theme-fire .footer__top__social a {
+  background: rgba(255,255,255,0.06) !important;
+  color: #fff !important;
+}
+
+body.theme-rain .portfolio__filter li,
+body.theme-fire .portfolio__filter li {
+  color: var(--muted) !important;
+  border-color: rgba(255,255,255,0.04) !important;
+}
+
+/* subtle change for modal in fire mode */
+body.theme-fire .pg-modal-content { background: linear-gradient(180deg, rgba(40,8,0,0.98), rgba(60,18,0,0.98)); }
+
+
+
+
+/* Hamburger click / press animation and smoother transitions */
+.slicknav_btn,
+.slicknav_menu {
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .22s cubic-bezier(.2,.9,.2,1), box-shadow .22s ease, opacity .18s ease;
+}
+.slicknav_btn:active,
+.slicknav_btn.slicknav_press {
+  transform: scale(0.92);
+}
+.slicknav_btn.slicknav_open {
+  transform: scale(1.02);
+}
+.slicknav_menu .slicknav_icon-bar {
+  transition: transform .28s cubic-bezier(.2,.9,.2,1), opacity .18s ease;
+  transform-origin: center;
+}
+
+/* small pulse on open to give feedback */
+@keyframes navPulse {
+  0% { box-shadow: 0 6px 18px rgba(0,0,0,0.12); }
+  50% { box-shadow: 0 12px 30px rgba(0,0,0,0.18); }
+  100% { box-shadow: 0 6px 18px rgba(0,0,0,0.12); }
+}
+.slicknav_btn.slicknav_open {
+  animation: navPulse .5s ease;
+}
+
+/* accessibility: focus visible */
+.slicknav_btn:focus-visible {
+  outline: 2px solid rgba(255,255,255,0.12);
+  outline-offset: 4px;
+}
+
+/* Menu rows: transparent background and smooth staggered entrance */
+.slicknav_nav .slicknav_row {
+  background: transparent !important;
+  color: #ffffff !important;
+  padding: 10px 14px !important;
+  border-radius: 6px;
+  transform: translateX(-12px);
+  opacity: 0;
+  transition: transform .36s cubic-bezier(.2,.9,.2,1), opacity .32s ease;
+}
+
+/* When the button has open state, animate rows in with stagger */
+.slicknav_btn.slicknav_open + .slicknav_nav .slicknav_row { transform: translateX(0); opacity: 1; }
+.slicknav_btn.slicknav_open + .slicknav_nav li:nth-child(1) .slicknav_row { transition-delay: 0.04s; }
+.slicknav_btn.slicknav_open + .slicknav_nav li:nth-child(2) .slicknav_row { transition-delay: 0.08s; }
+.slicknav_btn.slicknav_open + .slicknav_nav li:nth-child(3) .slicknav_row { transition-delay: 0.12s; }
+.slicknav_btn.slicknav_open + .slicknav_nav li:nth-child(4) .slicknav_row { transition-delay: 0.16s; }
+.slicknav_btn.slicknav_open + .slicknav_nav li:nth-child(5) .slicknav_row { transition-delay: 0.20s; }
+.slicknav_btn.slicknav_open + .slicknav_nav li:nth-child(6) .slicknav_row { transition-delay: 0.24s; }
+.slicknav_btn.slicknav_open + .slicknav_nav li:nth-child(7) .slicknav_row { transition-delay: 0.28s; }
+.slicknav_btn.slicknav_open + .slicknav_nav li:nth-child(8) .slicknav_row { transition-delay: 0.32s; }
+
+/* Hover/active feedback while keeping transparent background */
+.slicknav_nav .slicknav_row:hover {
+  background: rgba(255,255,255,0.03) !important;
+  transform: translateX(3px);
+}
+.slicknav_nav .slicknav_row:active {
+  transform: scale(0.995);
+}
+
+
+
+/* Override: hide the 'MENU' text from Slicknav button and ensure icon-only button */
+.slicknav_menu .slicknav_menutxt {
+  display: none !important;
+}
+.slicknav_menu .slicknav_icon { margin: 0; }
+.slicknav_menu { padding: 0; }
